@@ -1,14 +1,15 @@
-local main = require('notes.telescope._extensions.notes.main')
-local utils = require('notes.telescope._extensions.notes.utils')
+local utils = require('notes_nvim.utils')
 
-local function before_note_saved (args)
+local M = {}
+
+M.before_note_saved = function (args)
    local buf = args['buf']
    vim.api.nvim_buf_set_lines(buf, 2, 3, true, {
       'modified: ' .. utils.get_current_date(),
    })
 end
 
-local function on_note_saved (args)
+M.on_note_saved = function (args)
    local current_dir = vim.api.nvim_exec('pwd', false)
    vim.api.nvim_exec('cd ' .. utils.get_notes_dir(), false)
    vim.api.nvim_exec('!git add ' .. args['file'], true)
@@ -17,14 +18,14 @@ local function on_note_saved (args)
    vim.api.nvim_exec('cd ' .. current_dir, false)
 end
 
-local function pull_notes ()
+M.pull_notes = function ()
    local current_dir = vim.api.nvim_exec('pwd', false)
    vim.api.nvim_exec('cd ' .. utils.get_notes_dir(), false)
    vim.api.nvim_exec('!git pull', true)
    vim.api.nvim_exec('cd ' .. current_dir, false)
 end
 
-local function new_note ()
+M.new_note = function ()
    local path = utils.get_notes_dir()
    local title = vim.fn.input('Note title: ', '')
    local fname = utils.get_note_file_name(title)
@@ -43,18 +44,4 @@ local function new_note ()
    end
 end
 
--- register commands
-vim.api.nvim_create_user_command('Note', new_note, { nargs = 0 })
-vim.api.nvim_create_user_command('NotesPull', pull_notes, { nargs = 0 })
-vim.api.nvim_create_user_command('NotesFind', main.find_notes, { nargs = 0 })
-
--- register autocmds
-vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
-   pattern = { utils.get_notes_dir() .. '/**' },
-   callback = on_note_saved
-})
-vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-   pattern = { utils.get_notes_dir() .. '/**' },
-   callback = before_note_saved
-})
-
+return M
