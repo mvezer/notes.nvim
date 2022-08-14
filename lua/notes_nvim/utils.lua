@@ -47,6 +47,8 @@ M.get_note_file_name = function (title)
    local fname
    -- trim title
    title = string.gsub(title, "^%s*(.-)%s*$", "%1")
+   -- replace spaces with underscore
+   title = string.gsub(title, "%s+", "_")
    if title == '' then
       -- if the title is empty, we use the current date
       fname = os.date("%Y-%m-%d-%H-%M-%S")
