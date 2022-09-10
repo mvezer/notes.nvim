@@ -5,7 +5,8 @@ local main = require('telescope._extensions.notes.main')
 
 local M = {}
 
-M.sync_notes = notes.sync_notes
+M.sync_notes_down = notes.sync_notes_down
+M.sync_notes_up = notes.sync_notes_up
 M.new_note = notes.new_note
 M.find_notes = main.find_notes
 
@@ -13,7 +14,8 @@ M.setup = function(options)
   config.setup(options)
   -- register commands
   vim.api.nvim_create_user_command('Note', notes.new_note, { nargs = "?" })
-  vim.api.nvim_create_user_command('NotesSync', notes.sync_notes, { nargs = "?" })
+  vim.api.nvim_create_user_command('NotesSyncDown', notes.sync_notes_down, { nargs = "?" })
+  vim.api.nvim_create_user_command('NotesSyncUp', notes.sync_notes_up, { nargs = "?" })
   vim.api.nvim_create_user_command('NotesFind', main.find_notes, { nargs = "?" })
 
   -- register autocmds
@@ -37,7 +39,7 @@ M.setup = function(options)
     end
   end
 
-  notes.sync_notes("all")
+  notes.sync_notes_down("all")
 end
 
 return M

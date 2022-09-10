@@ -28,12 +28,26 @@ M.on_after_save = function (args)
   end
 end
 
-M.sync_notes = function (notebook)
+M.sync_notes_down = function (notebook)
   if notebook == nil then notebook = "all" end
   for nb_name, nb in pairs(config.settings.notebooks) do
     if (notebook == "all" or nb_name == notebook) and nb.remote ~= nil then
       utils.exec_async("rclone", {
-        "bisync",
+        "sync",
+        nb.remote,
+        nb.dir,
+        "-q"
+      })
+    end
+  end
+end
+
+M.sync_notes_up = function (notebook)
+  if notebook == nil then notebook = "all" end
+  for nb_name, nb in pairs(config.settings.notebooks) do
+    if (notebook == "all" or nb_name == notebook) and nb.remote ~= nil then
+      utils.exec_async("rclone", {
+        "sync",
         nb.dir,
         nb.remote,
         "-q"
