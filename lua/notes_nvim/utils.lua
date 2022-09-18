@@ -92,6 +92,10 @@ M.split = function(inputString, sep)
   return fields
 end
 
+M.str_is_empty = function(str)
+  return str == nil or str == ""
+end
+
 M.exec_async = function(command, args)
   Job:new {
     command = command,

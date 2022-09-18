@@ -58,7 +58,7 @@ end
 
 M.new_note = function (args)
   local notebook = args.args
-  if notebook == nil then notebook = config.settings.default_notebook end
+  if utils.str_is_empty(notebook) then notebook = config.settings.default_notebook end
   local title = vim.fn.input('Note title: ', '')
   local fname = utils.get_note_file_name(title)
   vim.cmd('e ' .. utils.path_join(config.settings.notebooks[notebook].dir, fname))
