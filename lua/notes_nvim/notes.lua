@@ -72,7 +72,7 @@ M.new_note = function (args)
         'modified: ' .. utils.get_current_date(),
         'tags: []',
         '---',
-        '#' .. title
+        '# ' .. title
       })
   end
 end
