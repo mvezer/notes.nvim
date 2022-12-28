@@ -28,8 +28,9 @@ M.on_after_save = function (args)
   end
 end
 
-M.sync_notes_down = function (notebook)
-  if notebook == nil then notebook = "all" end
+M.sync_notes_down = function (args)
+  local notebook = args.args
+  if notebook == nil or string.len(notebook) == 0 then notebook = "all" end
   for nb_name, nb in pairs(config.settings.notebooks) do
     if (notebook == "all" or nb_name == notebook) and nb.remote ~= nil then
       utils.exec_async("rclone", {
@@ -42,8 +43,9 @@ M.sync_notes_down = function (notebook)
   end
 end
 
-M.sync_notes_up = function (notebook)
-  if notebook == nil then notebook = "all" end
+M.sync_notes_up = function (args)
+  local notebook = args.args
+  if notebook == nil or string.len(notebook) == 0 then notebook = "all" end
   for nb_name, nb in pairs(config.settings.notebooks) do
     if (notebook == "all" or nb_name == notebook) and nb.remote ~= nil then
       utils.exec_async("rclone", {

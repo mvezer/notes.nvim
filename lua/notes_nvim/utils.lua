@@ -1,4 +1,5 @@
 local Job = require "plenary.job"
+local log = require "notes_nvim.log"
 local M = {}
 
 M.path_separator = "/"
@@ -100,13 +101,13 @@ M.exec_async = function(command, args)
   Job:new {
     command = command,
     args =  args or {},
-    on_exit = function(_, exit_code)
+    on_exit = vim.schedule_wrap(function(err, exit_code)
       if exit_code ~= 0 then
-        error("Could not sync note")
+          log.error(err._stderr_results)
       else
         print("Note(s) sync complete")
       end
-    end,
+    end),
   }:start(30000)
 end
 
